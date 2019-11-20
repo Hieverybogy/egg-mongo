@@ -18,11 +18,11 @@ class UserService extends Service {
             ctx,
         } = this;
         const result = await ctx.model.User.find();
-        let list = new Array();
-        result.map((o1) => {
-            list.push(o1.userName)
-        })
-        return list;
+        // let list = new Array();
+        // result.map((o1) => {
+        //     list.push(o1.userName)
+        // })
+        return result;
     }
 }
 module.exports = UserService;

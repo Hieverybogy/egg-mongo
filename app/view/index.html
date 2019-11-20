@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="file" id="aaa">
+
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.js"></script>
+    <script>
+            var csrftoken = '';
+            try {
+                csrftoken = document.cookie.split('csrfToken=')[1].split(';')[0];
+            } catch(e) {}
+            function csrfSafeMethod(method) {
+                return(/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+        let aA = document.getElementById("aaa");
+        aA.addEventListener("change", function () {
+            let files = document.getElementById("aaa").files;
+            let formData = new FormData();
+            formData.append('file', files[0]);
+            
+            $.ajax({
+                type: 'post',
+                cache: false,
+                processData: false,
+                contentType: false,
+                 //跨域请求
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                beforeSend(xhr, settings) {
+                    if(!csrfSafeMethod(settings.type)) {
+                        xhr.setRequestHeader('x-csrf-token', csrftoken);
+                    }
+                },
+                url: 'http://127.0.0.1:7001/uploadfile',
+                data: formData,
+                success: function(data, status) {
+                    console.log(data);
+
+                    bbb();
+                }
+            })
+        })
+
+        function bbb () {
+            $.ajax({
+                url: 'http://127.0.0.1:7001/exportFile',
+                type: 'post',
+                  //跨域请求
+                  xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                beforeSend(xhr, settings) {
+                    if(!csrfSafeMethod(settings.type)) {
+                        xhr.setRequestHeader('x-csrf-token', csrftoken);
+                    }
+                },
+                data: {},
+                success: function(data, status) {
+                    console.log(data);
+                }
+            })
+        }
+
+    </script>
+</body>
+
+</html>

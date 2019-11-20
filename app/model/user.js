@@ -10,6 +10,10 @@ module.exports = app => {
       unique: true,
       required: true,
     },
+    password: {
+      type: String,
+      unique: true
+    }
   });
   return mongoose.model('User', UserSchema, 'users');
 };
